@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"os"
-	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/jasonlvhit/gocron"
@@ -11,25 +9,7 @@ import (
 
 // Run a Redis instance with Docker: docker run --rm -tid -p 6379:6379 redis:alpine
 
-func lockedTask(name string) {
-	fmt.Printf("Hello, %s!\n", name)
-
-	t := time.NewTicker(time.Millisecond * 100)
-	c := make(chan struct{})
-	time.AfterFunc(time.Second*5, func() {
-		close(c)
-	})
-
-	for {
-		select {
-		case <-t.C:
-			fmt.Print(".")
-		case <-c:
-			fmt.Println()
-			return
-		}
-	}
-}
+func lockedTask(name string) { _ = "STUB: not implemented"; return }
 
 // locker implementation with Redis
 type locker struct {
@@ -37,16 +17,11 @@ type locker struct {
 }
 
 func (s *locker) Lock(key string) (success bool, err error) {
-	res, err := s.cache.SetNX(key, time.Now().String(), time.Second*15).Result()
-	if err != nil {
-		return false, err
-	}
-	return res, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
-func (s *locker) Unlock(key string) error {
-	return s.cache.Del(key).Err()
-}
+func (s *locker) Unlock(key string) error { _ = "STUB: not implemented"; return nil }
 
 // Run the example in different terminals,
 // passing a different name parameter to each

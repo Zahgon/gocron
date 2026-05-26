@@ -1,7 +1,6 @@
 package gocron
 
 import (
-	"sort"
 	"time"
 )
 
@@ -18,196 +17,75 @@ var (
 )
 
 // NewScheduler creates a new scheduler
-func NewScheduler() *Scheduler {
-	return &Scheduler{
-		jobs: [MAXJOBNUM]*Job{},
-		size: 0,
-		loc:  loc,
-	}
-}
+func NewScheduler() *Scheduler { _ = "STUB: not implemented"; return nil }
 
 // Jobs returns the list of Jobs from the Scheduler
-func (s *Scheduler) Jobs() []*Job {
-	return s.jobs[:s.size]
-}
+func (s *Scheduler) Jobs() []*Job { _ = "STUB: not implemented"; return nil }
 
-func (s *Scheduler) Len() int {
-	return s.size
-}
+func (s *Scheduler) Len() int { _ = "STUB: not implemented"; return 0 }
 
-func (s *Scheduler) Swap(i, j int) {
-	s.jobs[i], s.jobs[j] = s.jobs[j], s.jobs[i]
-}
+func (s *Scheduler) Swap(i, j int) { _ = "STUB: not implemented"; return }
 
-func (s *Scheduler) Less(i, j int) bool {
-	return s.jobs[j].nextRun.Unix() >= s.jobs[i].nextRun.Unix()
-}
+func (s *Scheduler) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
 // ChangeLoc changes the default time location
-func (s *Scheduler) ChangeLoc(newLocation *time.Location) {
-	s.loc = newLocation
-}
+func (s *Scheduler) ChangeLoc(newLocation *time.Location) { _ = "STUB: not implemented"; return }
 
 // Get the current runnable jobs, which shouldRun is True
 func (s *Scheduler) getRunnableJobs() (runningJobs [MAXJOBNUM]*Job, n int) {
-	runnableJobs := [MAXJOBNUM]*Job{}
-	n = 0
-	sort.Sort(s)
-	for i := 0; i < s.size; i++ {
-		if s.jobs[i].shouldRun() {
-			runnableJobs[n] = s.jobs[i]
-			n++
-		} else {
-			break
-		}
-	}
-	return runnableJobs, n
+	_ = "STUB: not implemented"
+	return nil, 0
 }
 
 // NextRun datetime when the next job should run.
 func (s *Scheduler) NextRun() (*Job, time.Time) {
-	if s.size <= 0 {
-		return nil, time.Now()
-	}
-	sort.Sort(s)
-	return s.jobs[0], s.jobs[0].nextRun
+	_ = "STUB: not implemented"
+	return nil, *new(time.Time)
 }
 
 // Every schedule a new periodic job with interval
-func (s *Scheduler) Every(interval uint64) *Job {
-	job := NewJob(interval).Loc(s.loc)
-	s.jobs[s.size] = job
-	s.size++
-	return job
-}
+func (s *Scheduler) Every(interval uint64) *Job { _ = "STUB: not implemented"; return nil }
 
 // RunPending runs all the jobs that are scheduled to run.
-func (s *Scheduler) RunPending() {
-	runnableJobs, n := s.getRunnableJobs()
-
-	if n != 0 {
-		for i := 0; i < n; i++ {
-			go runnableJobs[i].run()
-			runnableJobs[i].lastRun = time.Now()
-			runnableJobs[i].scheduleNextRun()
-		}
-	}
-}
+func (s *Scheduler) RunPending() { _ = "STUB: not implemented"; return }
 
 // RunAll run all jobs regardless if they are scheduled to run or not
-func (s *Scheduler) RunAll() {
-	s.RunAllwithDelay(0)
-}
+func (s *Scheduler) RunAll() { _ = "STUB: not implemented"; return }
 
 // RunAllwithDelay runs all jobs with delay seconds
-func (s *Scheduler) RunAllwithDelay(d int) {
-	for i := 0; i < s.size; i++ {
-		go s.jobs[i].run()
-		if 0 != d {
-			time.Sleep(time.Duration(d))
-		}
-	}
-}
+func (s *Scheduler) RunAllwithDelay(d int) { _ = "STUB: not implemented"; return }
 
 // Remove specific job j by function
-func (s *Scheduler) Remove(j interface{}) {
-	s.removeByCondition(func(someJob *Job) bool {
-		return someJob.jobFunc == getFunctionName(j)
-	})
-}
+func (s *Scheduler) Remove(j interface{}) { _ = "STUB: not implemented"; return }
 
 // RemoveByRef removes specific job j by reference
-func (s *Scheduler) RemoveByRef(j *Job) {
-	s.removeByCondition(func(someJob *Job) bool {
-		return someJob == j
-	})
-}
+func (s *Scheduler) RemoveByRef(j *Job) { _ = "STUB: not implemented"; return }
 
 // RemoveByTag removes specific job j by tag
-func (s *Scheduler) RemoveByTag(t string) {
-	s.removeByCondition(func(someJob *Job) bool {
-		for _, a := range someJob.tags {
-			if a == t {
-				return true
-			}
-		}
-		return false
-	})
-}
+func (s *Scheduler) RemoveByTag(t string) { _ = "STUB: not implemented"; return }
 
 func (s *Scheduler) removeByCondition(shouldRemove func(*Job) bool) {
-	i := 0
+	_ = "STUB: not implemented"
 
 	// keep deleting until no more jobs match the criteria
-	for {
-		found := false
-
-		for ; i < s.size; i++ {
-			if shouldRemove(s.jobs[i]) {
-				found = true
-				break
-			}
-		}
-
-		if !found {
-			return
-		}
-
-		for j := (i + 1); j < s.size; j++ {
-			s.jobs[i] = s.jobs[j]
-			i++
-		}
-		s.size--
-		s.jobs[s.size] = nil
-	}
+	return
 }
 
 // Scheduled checks if specific job j was already added
-func (s *Scheduler) Scheduled(j interface{}) bool {
-	for _, job := range s.jobs {
-		if job.jobFunc == getFunctionName(j) {
-			return true
-		}
-	}
-	return false
-}
+func (s *Scheduler) Scheduled(j interface{}) bool { _ = "STUB: not implemented"; return false }
 
 // Clear delete all scheduled jobs
-func (s *Scheduler) Clear() {
-	for i := 0; i < s.size; i++ {
-		s.jobs[i] = nil
-	}
-	s.size = 0
-}
+func (s *Scheduler) Clear() { _ = "STUB: not implemented"; return }
 
 // Start all the pending jobs
 // Add seconds ticker
-func (s *Scheduler) Start() chan bool {
-	stopped := make(chan bool, 1)
-	ticker := time.NewTicker(1 * time.Second)
-
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				s.RunPending()
-			case <-stopped:
-				ticker.Stop()
-				return
-			}
-		}
-	}()
-
-	return stopped
-}
+func (s *Scheduler) Start() chan bool { _ = "STUB: not implemented"; return nil }
 
 // The following methods are shortcuts for not having to
 // create a Scheduler instance
 
 // Every schedules a new periodic job running in specific interval
-func Every(interval uint64) *Job {
-	return defaultScheduler.Every(interval)
-}
+func Every(interval uint64) *Job { _ = "STUB: not implemented"; return nil }
 
 // RunPending run all jobs that are scheduled to run
 //
@@ -216,50 +94,29 @@ func Every(interval uint64) *Job {
 // that should run every minute and you only call run_pending()
 // in one hour increments then your job won't be run 60 times in
 // between but only once.
-func RunPending() {
-	defaultScheduler.RunPending()
-}
+func RunPending() { _ = "STUB: not implemented"; return }
 
 // RunAll run all jobs regardless if they are scheduled to run or not.
-func RunAll() {
-	defaultScheduler.RunAll()
-}
+func RunAll() { _ = "STUB: not implemented"; return }
 
 // RunAllwithDelay run all the jobs with a delay in seconds
 //
 // A delay of `delay` seconds is added between each job. This can help
 // to distribute the system load generated by the jobs more evenly over
 // time.
-func RunAllwithDelay(d int) {
-	defaultScheduler.RunAllwithDelay(d)
-}
+func RunAllwithDelay(d int) { _ = "STUB: not implemented"; return }
 
 // Start run all jobs that are scheduled to run
-func Start() chan bool {
-	return defaultScheduler.Start()
-}
+func Start() chan bool { _ = "STUB: not implemented"; return nil }
 
 // Clear all scheduled jobs
-func Clear() {
-	defaultScheduler.Clear()
-}
+func Clear() { _ = "STUB: not implemented"; return }
 
 // Remove a specific job
-func Remove(j interface{}) {
-	defaultScheduler.Remove(j)
-}
+func Remove(j interface{}) { _ = "STUB: not implemented"; return }
 
 // Scheduled checks if specific job j was already added
-func Scheduled(j interface{}) bool {
-	for _, job := range defaultScheduler.jobs {
-		if job.jobFunc == getFunctionName(j) {
-			return true
-		}
-	}
-	return false
-}
+func Scheduled(j interface{}) bool { _ = "STUB: not implemented"; return false }
 
 // NextRun gets the next running time
-func NextRun() (job *Job, time time.Time) {
-	return defaultScheduler.NextRun()
-}
+func NextRun() (job *Job, time time.Time) { _ = "STUB: not implemented"; return nil, *new(time.Time) }
